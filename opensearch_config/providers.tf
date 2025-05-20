@@ -11,7 +11,6 @@ terraform {
 provider "opensearch" {
   url                   = var.opensearch_url
   aws_region            = var.aws_region
-  aws_profile           = var.aws_profile
   insecure              = var.insecure
   aws_service_name      = "es"  # Use "es" for Amazon OpenSearch Service
 }
