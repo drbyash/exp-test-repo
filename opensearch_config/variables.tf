@@ -10,11 +10,6 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
-variable "aws_profile" {
-  description = "AWS profile to use for authentication"
-  type        = string
-  default     = "default"
-}
 
 variable "insecure" {
   description = "Whether to skip TLS certificate validation"
