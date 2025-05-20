@@ -12,5 +12,4 @@ provider "opensearch" {
   url                   = var.opensearch_url
   aws_region            = var.aws_region
   insecure              = var.insecure
-  aws_service_name      = "es"  # Use "es" for Amazon OpenSearch Service
 }
