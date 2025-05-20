@@ -136,13 +136,13 @@ variable "readonly_backend_roles" {
 variable "opensearch_username" {
   description = "Username for OpenSearch basic authentication (if applicable)"
   type        = string
-  default     = admin
+  default     = null
 }
 
 variable "opensearch_password" {
   description = "Password for OpenSearch basic authentication (if applicable)"
   type        = string
-  default     = Admin@123
+  default     = null
   sensitive   = true
 }
 
