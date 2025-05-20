@@ -132,3 +132,17 @@ variable "readonly_backend_roles" {
   type        = list(string)
   default     = ["arn:aws:iam::779846821024:role/mycompany-dev-analyst"]
 }
+
+variable "opensearch_username" {
+  description = "Username for OpenSearch basic authentication (if applicable)"
+  type        = string
+  default     = admin
+}
+
+variable "opensearch_password" {
+  description = "Password for OpenSearch basic authentication (if applicable)"
+  type        = string
+  default     = Admin@123
+  sensitive   = true
+}
+
