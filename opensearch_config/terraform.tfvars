@@ -11,6 +11,8 @@ admin_index_patterns      = ["*"]
 admin_index_actions       = ["*"]
 admin_tenant_patterns     = ["*"]
 admin_tenant_actions      = ["*"]
+opensearch_username = "admin"
+opensearch_password = "Admin@123"
 
 # Read-only Role Values
 readonly_role_name           = "mycompany_readonly_role"
