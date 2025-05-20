@@ -13,4 +13,7 @@ provider "opensearch" {
   aws_region            = var.aws_region
   insecure              = var.insecure
   healthcheck = false
+sign_aws_requests     = true
+username              = var.opensearch_username
+password              = var.opensearch_password  
 }
