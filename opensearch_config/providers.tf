@@ -14,5 +14,6 @@ provider "opensearch" {
   insecure              = var.insecure
   healthcheck = false
 username              = var.opensearch_username
-password              = var.opensearch_password  
+password              = var.opensearch_password 
+sign_aws_requests     = false
 }
