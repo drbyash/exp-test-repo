@@ -1,7 +1,6 @@
 # Provider Configuration
-opensearch_url = "https://your-opensearch-endpoint.region.es.amazonaws.com"
-aws_region     = "us-east-1"
-aws_profile    = "default"
+opensearch_url = "https://vpc-mycompany-dev-opensearch-ti5oqto3qpimtyymrgyrgwsouy.ap-south-1.es.amazonaws.com"
+aws_region     = "ap-south-1"
 insecure       = false
 
 # Admin Role Values
