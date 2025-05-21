@@ -1,0 +1,17 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": [
+          "arn:aws:iam::779846821024:role/cadie-role",
+          "arn:aws:iam::779846821024:role/pr1c-installer-RolesSSMDefaultRoleForOneClickPvreRe-Zeuc8gN14spm",
+          "arn:aws:iam::779846821024:role/mycompany-dev-analyst"
+        ]
+      },
+      "Action": "es:*",
+      "Resource": "arn:aws:es:ap-south-1:779846821024:domain/mycompany-dev-opensearch/*"
+    }
+  ]
+}
