@@ -37,3 +37,22 @@ admin_backend_roles       = ["arn:aws:iam::779846821024:role/mycompany-dev-admin
 
 readonly_mapping_description = "Maps analyst IAM roles to OpenSearch readonly role"
 readonly_backend_roles       = ["arn:aws:iam::779846821024:role/mycompany-dev-analyst"]
+
+# Cadie Role Values
+cadie_role_name           = "cadie_role"
+cadie_role_description    = "Cadie application role for specific operations"
+cadie_cluster_permissions = [
+  "cluster:monitor/*",
+  "cluster_composite_ops_ro"
+]
+cadie_index_patterns      = ["cadie-*"]
+cadie_index_actions       = [
+  "indices:admin/mapping/put",
+  "indices:data/write/*",
+  "indices:data/read/*",
+  "indices:admin/create"
+]
+cadie_tenant_patterns     = ["cadie"]
+cadie_tenant_actions      = ["kibana_all_write"]
+cadie_mapping_description = "Maps cadie IAM role to OpenSearch cadie role"
+cadie_backend_roles       = ["arn:aws:iam::779846821024:role/cadie-role"]
