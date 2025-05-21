@@ -11,8 +11,13 @@ admin_index_patterns      = ["*"]
 admin_index_actions       = ["*"]
 admin_tenant_patterns     = ["*"]
 admin_tenant_actions      = ["*"]
-opensearch_username = "admin"
-opensearch_password = "Admin@123"
+#opensearch_username = "admin"
+#opensearch_password = "Admin@123"
+
+
+#master user ARN
+master_user_arn = "arn:aws:iam::779846821024:role/pr1c-installer-RolesSSMDefaultRoleForOneClickPvreRe-Zeuc8gN14spm"
+
 
 # Read-only Role Values
 readonly_role_name           = "mycompany_readonly_role"
