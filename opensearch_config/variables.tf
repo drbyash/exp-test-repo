@@ -133,17 +133,23 @@ variable "readonly_backend_roles" {
   default     = ["arn:aws:iam::779846821024:role/mycompany-dev-analyst"]
 }
 
-variable "opensearch_username" {
-  description = "Username for OpenSearch basic authentication (if applicable)"
-  type        = string
-  default     = null
-}
+#variable "opensearch_username" {
+#  description = "Username for OpenSearch basic authentication (if applicable)"
+#  type        = string
+#  default     = null
+#}
 
-variable "opensearch_password" {
-  description = "Password for OpenSearch basic authentication (if applicable)"
+#variable "opensearch_password" {
+#  description = "Password for OpenSearch basic authentication (if applicable)"
+#  type        = string
+# default     = null
+#  sensitive   = true
+#}
+# IAM master user variable
+variable "master_user_arn" {
+  description = "ARN of the IAM role to be set as master user"
   type        = string
-  default     = null
-  sensitive   = true
+  default     = "arn:aws:iam::779846821024:role/pr1c-installer-RolesSSMDefaultRoleForOneClickPvreRe-Zeuc8gN14spm"
 }
 
 # Cadie Role Variables
