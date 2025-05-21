@@ -146,3 +146,65 @@ variable "opensearch_password" {
   sensitive   = true
 }
 
+# Cadie Role Variables
+variable "cadie_role_name" {
+  description = "Name of the cadie role"
+  type        = string
+  default     = "cadie_role"
+}
+
+variable "cadie_role_description" {
+  description = "Description for the cadie role"
+  type        = string
+  default     = "Cadie application role for specific operations"
+}
+
+variable "cadie_cluster_permissions" {
+  description = "Cluster permissions for the cadie role"
+  type        = list(string)
+  default     = [
+    "cluster:monitor/*",
+    "cluster_composite_ops_ro"
+  ]
+}
+
+variable "cadie_index_patterns" {
+  description = "Index patterns for the cadie role"
+  type        = list(string)
+  default     = ["cadie-*"]
+}
+
+variable "cadie_index_actions" {
+  description = "Allowed actions for the cadie role on indices"
+  type        = list(string)
+  default     = [
+    "indices:admin/mapping/put",
+    "indices:data/write/*",
+    "indices:data/read/*",
+    "indices:admin/create"
+  ]
+}
+
+variable "cadie_tenant_patterns" {
+  description = "Tenant patterns for the cadie role"
+  type        = list(string)
+  default     = ["cadie"]
+}
+
+variable "cadie_tenant_actions" {
+  description = "Allowed actions for the cadie role on tenants"
+  type        = list(string)
+  default     = ["kibana_all_write"]
+}
+
+variable "cadie_mapping_description" {
+  description = "Description for the cadie role mapping"
+  type        = string
+  default     = "Maps cadie IAM role to OpenSearch cadie role"
+}
+
+variable "cadie_backend_roles" {
+  description = "Backend roles for the cadie role mapping"
+  type        = list(string)
+  default     = ["arn:aws:iam::779846821024:role/cadie-role"]
+}
