@@ -68,3 +68,45 @@ resource "opensearch_roles_mapping" "cadie_mapping" {
   description   = var.cadie_mapping_description
   backend_roles = var.cadie_backend_roles
 }
+
+
+
+
+
+
+
+
+# OpenSearch testing-Cadie Role
+resource "opensearch_role" "cadie_role" {
+  role_name           = "testing-cadie"
+  description         = var.cadie_role_description
+  cluster_permissions = var.cadie_cluster_permissions
+
+  index_permissions {
+    index_patterns  = var.cadie_index_patterns
+    allowed_actions = var.cadie_index_actions
+  }
+
+  tenant_permissions {
+    tenant_patterns = var.cadie_tenant_patterns
+    allowed_actions = var.cadie_tenant_actions
+  }
+}
+
+
+# Cadie Role Mapping
+resource "opensearch_roles_mapping" "cadie_mapping" {
+  role_name     = "testing-cadie"
+  description   = var.cadie_mapping_description
+  backend_roles = "arn:aws:iam::779846821024:role/access-tester-1"
+}
+
+
+
+
+
+
+
+
+
+
