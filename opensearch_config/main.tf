@@ -98,7 +98,7 @@ resource "opensearch_role" "cadie_role_1" {
 resource "opensearch_roles_mapping" "cadie_mapping_1" {
   role_name     = "testing-cadie"
   description   = var.cadie_mapping_description
-  backend_roles = "arn:aws:iam::779846821024:role/access-tester-1"
+  backend_roles = ["arn:aws:iam::779846821024:role/access-tester-1"]
 }
 
 
