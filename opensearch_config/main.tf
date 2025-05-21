@@ -77,7 +77,7 @@ resource "opensearch_roles_mapping" "cadie_mapping" {
 
 
 # OpenSearch testing-Cadie Role
-resource "opensearch_role" "cadie_role" {
+resource "opensearch_role" "cadie_role_1" {
   role_name           = "testing-cadie"
   description         = var.cadie_role_description
   cluster_permissions = var.cadie_cluster_permissions
@@ -95,7 +95,7 @@ resource "opensearch_role" "cadie_role" {
 
 
 # Cadie Role Mapping
-resource "opensearch_roles_mapping" "cadie_mapping" {
+resource "opensearch_roles_mapping" "cadie_mapping_1" {
   role_name     = "testing-cadie"
   description   = var.cadie_mapping_description
   backend_roles = "arn:aws:iam::779846821024:role/access-tester-1"
