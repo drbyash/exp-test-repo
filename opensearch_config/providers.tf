@@ -16,4 +16,5 @@ provider "opensearch" {
 #username              = var.opensearch_username
 #password              = var.opensearch_password 
 sign_aws_requests     = true
+timeout = "1m"
 }
