@@ -1,0 +1,4 @@
+aws_region = "us-east-1"
+redis_cluster_id = "my-existing-redis-cluster"
+name_prefix = "myapp-prod"
+existing_iam_role_arn = "arn:aws:iam::123456789012:role/my-existing-role"
