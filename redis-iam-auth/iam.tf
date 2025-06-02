@@ -3,7 +3,7 @@ data "aws_iam_role" "existing_role" {
   arn = var.existing_iam_role_arn
 }
 
-# Add ElastiCache IAM authentication policy to the existing role
+# Adding ElastiCache IAM authentication policy to the existing role
 resource "aws_iam_role_policy" "redis_auth_policy" {
   name   = "redis-iam-auth-policy"
   role   = data.aws_iam_role.existing_role.name
