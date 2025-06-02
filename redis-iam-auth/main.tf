@@ -21,7 +21,7 @@ resource "aws_elasticache_user_group" "redis_iam_users" {
 resource "aws_elasticache_user" "iam_auth_user" {
   user_id       = "${var.name_prefix}-iam-user"
   user_name     = "IAMAuthUser"
-  access_string = "on ~* +@all"
+  access_string = "on ~* -@all +@read +@connection -@write"
   engine        = "REDIS"
   authentication_mode {
     type = "iam"
