@@ -1,7 +1,3 @@
-provider "opensearch" {
-  url = var.opensearch_endpoint
-}
-
 module "opensearch_users" {
   source = "./modules/opensearch_user"
   users  = var.opensearch_users
