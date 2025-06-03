@@ -1,4 +1,4 @@
-resource "opensearch_role_mapping" "mapper" {
+resource "opensearch_roles_mapping" "mapper" {
   for_each = var.role_mappings
 
   role_name     = each.key
