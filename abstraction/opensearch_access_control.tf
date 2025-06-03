@@ -188,5 +188,5 @@ output "created_roles" {
 }
 
 output "created_role_mappings" {
-  value = keys(opensearch_role_mapping.mappings)
+  value = keys(opensearch_roles_mapping.mappings)
 }
