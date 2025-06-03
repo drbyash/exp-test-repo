@@ -11,7 +11,7 @@ terraform {
 }
 
 provider "opensearch" {
-    url                   = var.opensearch_url
+    url                   = var.opensearch_endpoint
     aws_region            = var.aws_region
     insecure              = var.insecure
     healthcheck           = false
