@@ -39,16 +39,6 @@ default     = null
  sensitive   = true
 }
 
-variable "user_password" {
-  description = "Enter the user password (required if creating user)"
-  type        = string
-  default     = null
-
-  validation {
-    condition     = var.user_password == null || length(var.user_password) >= 8
-    error_message = "Password must be at least 8 characters long when provided."
-  }
-}
 
 variable "aws_region" {
   description = "AWS region where the OpenSearch cluster is deployed"
@@ -154,22 +144,22 @@ locals {
   }
 }
 
-  validation {
-    condition = alltrue([
-      for k, v in var.application_config.access_control :
-      (!v.create_role && v.existing_role != null) || (v.create_role && v.permissions != null)
-    ])
-    error_message = "When create_role is false, existing_role must be provided. When create_role is true, permissions must be provided."
-  }
+ #  validation {
+  #   condition = alltrue([
+   #    for k, v in var.application_config.access_control :
+ #      (!v.create_role && v.existing_role != null) || (v.create_role && v.permissions != null)
+  #   ])
+ #    error_message = "When create_role is false, existing_role must be provided. When create_role is true, permissions must be provided."
+ #  }
 
-  validation {
-    condition = alltrue([
-      for k, v in var.application_config.access_control :
-      !v.create_user || (v.create_user && v.password != null)
-    ])
-    error_message = "Password must be provided when create_user is true."
-  }
-}
+ #  validation {
+ #    condition = alltrue([
+ #      for k, v in var.application_config.access_control :
+ #      !v.create_user || (v.create_user && v.password != null)
+  #   ])
+   #  error_message = "Password must be provided when create_user is true."
+ # }
+#}
 
 # Local variables for transformation
 locals {
