@@ -51,31 +51,97 @@ variable "insecure" {
   type        = bool
   default     = false
 }
+# Application Configuration Variables
+variable "app_name" {
+  description = "Enter the application name"
+  type        = string
+}
 
+variable "role_name" {
+  description = "Enter the role name (e.g., admin, readonly)"
+  type        = string
+}
 
-variable "application_config" {
-  description = "Configuration for OpenSearch access control"
-  type = object({
-    name = string
-    access_control = map(object({
-      create_user    = bool
-      password      = optional(string, null)
-      create_role   = bool
-      permissions   = optional(object({
-        cluster_permissions = optional(list(string), [])
-        index_permissions  = optional(list(object({
-          index_patterns  = list(string)
-          allowed_actions = list(string)
-        })), [])
-        tenant_permissions = optional(list(object({
-          tenant_patterns = list(string)
-          allowed_actions = list(string)
-        })), [])
-      }), null)
-      existing_role = optional(string, null)
-      backend_roles = list(string)
-    }))
-  })
+variable "create_user" {
+  description = "Do you want to create a user? (true/false)"
+  type        = bool
+}
+
+variable "user_password" {
+  description = "Enter the user password (required if creating user)"
+  type        = string
+  default     = null
+}
+
+variable "create_role" {
+  description = "Do you want to create a custom role? (true/false)"
+  type        = bool
+}
+
+variable "cluster_permissions" {
+  description = "Enter cluster permissions (e.g., cluster:monitor/*)"
+  type        = list(string)
+  default     = []
+}
+
+variable "index_patterns" {
+  description = "Enter index patterns (e.g., app-*)"
+  type        = list(string)
+  default     = []
+}
+
+variable "index_actions" {
+  description = "Enter allowed index actions (e.g., indices:*)"
+  type        = list(string)
+  default     = []
+}
+
+variable "tenant_patterns" {
+  description = "Enter tenant patterns (optional)"
+  type        = list(string)
+  default     = []
+}
+
+variable "tenant_actions" {
+  description = "Enter tenant actions (optional)"
+  type        = list(string)
+  default     = []
+}
+
+variable "backend_roles" {
+  description = "Enter backend roles (IAM ARNs)"
+  type        = list(string)
+}
+
+# Local variable to construct application_config
+locals {
+  application_config = {
+    name = var.app_name
+    access_control = {
+      "${var.role_name}" = {
+        create_user = var.create_user
+        password    = var.user_password
+        create_role = var.create_role
+        permissions = var.create_role ? {
+          cluster_permissions = var.cluster_permissions
+          index_permissions = [
+            {
+              index_patterns  = var.index_patterns
+              allowed_actions = var.index_actions
+            }
+          ]
+          tenant_permissions = length(var.tenant_patterns) > 0 ? [
+            {
+              tenant_patterns = var.tenant_patterns
+              allowed_actions = var.tenant_actions
+            }
+          ] : []
+        } : null
+        backend_roles = var.backend_roles
+      }
+    }
+  }
+}
 
   validation {
     condition = alltrue([
