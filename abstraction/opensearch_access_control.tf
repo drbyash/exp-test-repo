@@ -8,6 +8,14 @@ terraform {
   }
 }
 
+provider "opensearch" {
+  url         = var.opensearch_url
+  username    = var.opensearch_username
+  password    = var.opensearch_password
+  aws_region  = var.aws_region
+  insecure    = var.insecure
+}
+
 
 variable "opensearch_endpoint" {
   description = "OpenSearch domain endpoint"
@@ -121,13 +129,7 @@ locals {
   )
 }
 
-provider "opensearch" {
-  url         = var.opensearch_url
-  username    = var.opensearch_username
-  password    = var.opensearch_password
-  aws_region  = var.aws_region
-  insecure    = var.insecure
-}
+
 
 # OpenSearch User Resource
 resource "opensearch_user" "users" {
