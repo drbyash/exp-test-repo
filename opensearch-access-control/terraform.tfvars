@@ -23,6 +23,14 @@ opensearch_users = {
       environment = "prod"
       role = "admin"
     }
+  },
+  "cadie_new_user" = {
+    password = "MyPassword!" 
+    backend_roles = ["cadie_new_role"]
+    attributes = {
+      application = "cadie"
+      environment = "preprod"
+    }
   }
 }
 
@@ -86,6 +94,37 @@ opensearch_roles = {
       }
     ]
   }
+
+ "cadie_new_role" = {
+    # Read-only role with limited permissions
+    cluster_permissions = [
+      "cluster:monitor/*",
+      "indices:data/read/*"
+    ]
+    index_permissions = [
+      {
+        index_patterns  = ["cadie-*"]
+        allowed_actions = [
+          "read",
+          "search",
+          "get"
+        ]
+        # Mask sensitive fields
+        masked_fields = ["user_ssn", "credit_card"]
+        field_level_security = {
+          include = ["timestamp", "message", "level", "application"]
+          exclude = ["internal_id"]
+        }
+      }
+    ]
+    tenant_permissions = [
+      {
+        tenant_patterns = ["cadie_readonly_*"]
+        allowed_actions = ["kibana_all_read"]
+      }
+    ]
+  },
+
 }
 
 # Role mappings including mapping an IAM role to the existing read-only role
@@ -108,5 +147,12 @@ role_mappings = {
       "arn:aws:iam::779846821024:role/cadie-role"
     ],
     users = ["cadie_admin_user"]  # Also explicitly map the admin user
-  }
+  },
+
+  "cadie_new_role" = {
+    # Map IAM role to OpenSearch's built-in read-only role
+    backend_roles = [
+      "arn:aws:iam::779846821024:role/cadie-role"
+    ]
+  },
 }
