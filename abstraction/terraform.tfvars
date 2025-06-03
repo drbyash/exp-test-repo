@@ -1,4 +1,4 @@
-opensearch_url = "https://your-opensearch-endpoint.region.es.amazonaws.com"
+opensearch_url = "https://vpc-mycompany-dev-opensearch-ti5oqto3qpimtyymrgyrgwsouy.ap-south-1.es.amazonaws.com"
 opensearch_username = "admin"
 opensearch_password = "your-password"
 aws_region = "us-east-1"
