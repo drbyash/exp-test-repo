@@ -123,7 +123,7 @@ opensearch_roles = {
         allowed_actions = ["kibana_all_read"]
       }
     ]
-  },
+  }
 
 }
 
@@ -155,5 +155,5 @@ role_mappings = {
       "arn:aws:iam::779846821024:role/cadie-role",
       "arn:aws:iam::779846821024:role/access-tester-1"
     ]
-  },
+  }
 }
