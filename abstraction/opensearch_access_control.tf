@@ -167,7 +167,7 @@ resource "opensearch_role" "roles" {
 }
 
 # OpenSearch Role Mapping Resource
-resource "opensearch_role_mapping" "mappings" {
+resource "opensearch_roles_mapping" "mappings" {
   for_each = local.role_mappings
 
   role_name     = each.key
