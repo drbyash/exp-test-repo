@@ -25,7 +25,7 @@ opensearch_users = {
     }
   },
   "cadie_new_user" = {
-    password = "MyPassword!" 
+    password = "CadieUser123!@#" 
     backend_roles = ["cadie_new_role"]
     attributes = {
       application = "cadie"
