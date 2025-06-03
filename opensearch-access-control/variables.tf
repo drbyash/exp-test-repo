@@ -1,8 +1,3 @@
-variable "opensearch_endpoint" {
-  description = "OpenSearch domain endpoint"
-  type        = string
-}
-
 variable "opensearch_users" {
   description = "Map of OpenSearch users configurations"
   type = map(object({
