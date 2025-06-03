@@ -52,10 +52,6 @@ variable "insecure" {
   default     = false
 }
 
-variable "opensearch_url" {
-  description = "URL of the OpenSearch cluster"
-  type        = string
-}
 
 variable "application_config" {
   description = "Configuration for OpenSearch access control"
