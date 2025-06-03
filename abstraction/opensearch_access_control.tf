@@ -27,16 +27,16 @@ variable "opensearch_endpoint" {
 }
 
 variable "opensearch_username" {
- description = "Username for OpenSearch basic authentication (if applicable)"
- type        = string
- default     = null
+  description = "Username for OpenSearch basic authentication"
+  type        = string
+  default     = null
 }
 
 variable "opensearch_password" {
- description = "Password for OpenSearch basic authentication (if applicable)"
- type        = string
-default     = null
- sensitive   = true
+  description = "Password for OpenSearch basic authentication"
+  type        = string
+  default     = null
+  sensitive   = true
 }
 
 variable "aws_region" {
@@ -45,13 +45,11 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
-
 variable "insecure" {
   description = "Whether to skip TLS certificate validation"
   type        = bool
   default     = false
 }
-
 
 variable "application_config" {
   description = "Configuration for OpenSearch access control"
