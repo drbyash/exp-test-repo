@@ -1,6 +1,9 @@
 # terraform.tfvars
-opensearch_endpoint = "https://your-opensearch-domain.region.es.amazonaws.com"
-aws_region         = "us-west-2"
+opensearch_endpoint = "https://vpc-mycompany-dev-opensearch-ti5oqto3qpimtyymrgyrgwsouy.ap-south-1.es.amazonaws.com"
+aws_region     = "ap-south-1"
+insecure       = false
+opensearch_username = "admin"
+opensearch_password = "Admin@123"
 
 application_config = {
   name = "cadie"
@@ -24,7 +27,7 @@ application_config = {
           }
         ]
       }
-      backend_roles = ["arn:aws:iam::123456789012:role/CadieAdminRole"]
+      backend_roles = ["arn:aws:iam::779846821024:role/access-tester-1"]
     }
   }
 }
