@@ -39,6 +39,17 @@ default     = null
  sensitive   = true
 }
 
+variable "user_password" {
+  description = "Enter the user password (required if creating user)"
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.user_password == null || length(var.user_password) >= 8
+    error_message = "Password must be at least 8 characters long when provided."
+  }
+}
+
 variable "aws_region" {
   description = "AWS region where the OpenSearch cluster is deployed"
   type        = string
