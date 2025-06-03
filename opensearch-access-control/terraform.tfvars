@@ -152,7 +152,8 @@ role_mappings = {
   "cadie_new_role" = {
     # Map IAM role to OpenSearch's built-in read-only role
     backend_roles = [
-      "arn:aws:iam::779846821024:role/cadie-role"
+      "arn:aws:iam::779846821024:role/cadie-role",
+      "arn:aws:iam::779846821024:role/access-tester-1"
     ]
   },
 }
