@@ -20,5 +20,5 @@ provider "opensearch" {
 
 module "opensearch_access_control" {
   source = "./modules/opensearch_access_control"
-  application_config = local.application_config
+  application_config = var.application_config
 }
