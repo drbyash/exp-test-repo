@@ -11,7 +11,6 @@ resource "opensearch_role" "roles" {
       index_patterns       = index_permissions.value.index_patterns
       allowed_actions     = index_permissions.value.allowed_actions
       masked_fields      = index_permissions.value.masked_fields
-      field_level_security = index_permissions.value.field_level_security
     }
   }
 
