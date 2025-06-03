@@ -90,7 +90,7 @@ opensearch_roles = {
 
 # Role mappings including mapping an IAM role to the existing read-only role
 role_mappings = {
-  "readonly_access" = {
+  "readall" = {
     # Map IAM role to OpenSearch's built-in read-only role
     backend_roles = [
       "arn:aws:iam::779846821024:role/cadie-role"
