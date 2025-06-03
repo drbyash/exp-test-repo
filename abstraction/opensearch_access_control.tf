@@ -70,8 +70,6 @@ variable "application_config" {
         index_permissions  = optional(list(object({
           index_patterns  = list(string)
           allowed_actions = list(string)
-          masked_fields   = optional(list(string), [])
-          field_level_security = optional(map(list(string)), {})
         })), [])
         tenant_permissions = optional(list(object({
           tenant_patterns = list(string)
@@ -156,8 +154,6 @@ resource "opensearch_role" "roles" {
     content {
       index_patterns       = index_permissions.value.index_patterns
       allowed_actions     = index_permissions.value.allowed_actions
-      masked_fields      = index_permissions.value.masked_fields
-      field_level_security = index_permissions.value.field_level_security
     }
   }
 
