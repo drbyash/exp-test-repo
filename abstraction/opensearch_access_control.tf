@@ -1,138 +1,109 @@
+# main.tf
+
 terraform {
-  required_version = ">= 0.14.0"
   required_providers {
     opensearch = {
       source  = "opensearch-project/opensearch"
-      version = ">= 2.0.0"
+      version = "~> 2.0"
     }
   }
 }
 
 provider "opensearch" {
-  url         = var.opensearch_url
-  username    = var.opensearch_username
-  password    = var.opensearch_password
+  url         = var.opensearch_endpoint
   aws_region  = var.aws_region
-healthcheck           = false
-  insecure    = var.insecure
+  aws_sign_request = true
 }
 
-
+# Variables
 variable "opensearch_endpoint" {
   description = "OpenSearch domain endpoint"
   type        = string
 }
 
-variable "opensearch_username" {
-  description = "Username for OpenSearch basic authentication (if applicable)"
-  type        = string
-  default     = null
-}
-
-variable "opensearch_password" {
-  description = "Password for OpenSearch basic authentication (if applicable)"
-  type        = string
-  default     = null
-  sensitive   = true
-}
-
 variable "aws_region" {
-  description = "AWS region where the OpenSearch cluster is deployed"
-  type        = string
-  default     = "us-east-1"
-}
-
-variable "insecure" {
-  description = "Whether to skip TLS certificate validation"
-  type        = bool
-  default     = false
-}
-
-variable "opensearch_url" {
-  description = "URL of the OpenSearch cluster"
+  description = "AWS region"
   type        = string
 }
 
-variable "access_control" {
-  description = "Access control configuration for OpenSearch"
+variable "application_config" {
+  description = "Configuration for OpenSearch access control"
   type = object({
     name = string
     access_control = map(object({
       create_user    = bool
-      password       = optional(string)
-      create_role    = bool
-      permissions    = optional(object({
+      password      = optional(string, null)
+      create_role   = bool
+      permissions   = optional(object({
         cluster_permissions = optional(list(string), [])
-        index_permissions = optional(list(object({
+        index_permissions  = optional(list(object({
           index_patterns  = list(string)
           allowed_actions = list(string)
+          masked_fields   = optional(list(string), [])
+          field_level_security = optional(map(list(string)), {})
         })), [])
         tenant_permissions = optional(list(object({
           tenant_patterns = list(string)
           allowed_actions = list(string)
         })), [])
-      }))
-      existing_role = optional(string)
-      backend_roles = optional(list(string), [])
+      }), null)
+      existing_role = optional(string, null)
+      backend_roles = list(string)
     }))
   })
+
+  validation {
+    condition = alltrue([
+      for k, v in var.application_config.access_control :
+      (!v.create_role && v.existing_role != null) || (v.create_role && v.permissions != null)
+    ])
+    error_message = "When create_role is false, existing_role must be provided. When create_role is true, permissions must be provided."
+  }
+
+  validation {
+    condition = alltrue([
+      for k, v in var.application_config.access_control :
+      !v.create_user || (v.create_user && v.password != null)
+    ])
+    error_message = "Password must be provided when create_user is true."
+  }
 }
 
+# Local variables for transformation
 locals {
-  app_name = var.access_control.name
-  
-  # Process users
+  # User configurations
   users = {
-    for role_name, config in var.access_control.access_control :
-    "${local.app_name}_${role_name}_user" => {
-      password      = config.password
+    for role_name, config in var.application_config.access_control :
+    "${var.application_config.name}_${role_name}_user" => {
+      password = config.password
       backend_roles = []
-      attributes    = {}
+      attributes = {
+        application = var.application_config.name
+        role = role_name
+      }
     }
-    if config.create_user == true && config.password != null
+    if config.create_user
   }
-  
-  # Process roles
+
+  # Role configurations
   roles = {
-    for role_name, config in var.access_control.access_control :
-    "${local.app_name}_${role_name}" => {
-      cluster_permissions = try(config.permissions.cluster_permissions, [])
-      index_permissions   = try(config.permissions.index_permissions, [])
-      tenant_permissions  = try(config.permissions.tenant_permissions, [])
-    }
-    if config.create_role == true && config.permissions != null
+    for role_name, config in var.application_config.access_control :
+    "${var.application_config.name}_${role_name}" => config.permissions
+    if config.create_role
   }
-  
-  # Process role mappings
-  role_mappings = merge(
-    # Role mappings for created roles
-    {
-      for role_name, config in var.access_control.access_control :
-      "${local.app_name}_${role_name}" => {
-        backend_roles = concat(
-          config.backend_roles,
-          config.create_user ? ["${local.app_name}_${role_name}_user"] : []
-        )
+
+  # Role mapping configurations
+  role_mappings = merge([
+    for role_name, config in var.application_config.access_control : {
+      "${config.create_role ? "${var.application_config.name}_${role_name}" : config.existing_role}" = {
+        backend_roles = config.backend_roles
+        users = config.create_user ? ["${var.application_config.name}_${role_name}_user"] : []
       }
-      if config.create_role == true && (length(config.backend_roles) > 0 || config.create_user)
-    },
-    # Role mappings for existing roles
-    {
-      for role_name, config in var.access_control.access_control :
-      config.existing_role => {
-        backend_roles = concat(
-          config.backend_roles,
-          config.create_user ? ["${local.app_name}_${role_name}_user"] : []
-        )
-      }
-      if config.create_role == false && config.existing_role != null && (length(config.backend_roles) > 0 || config.create_user)
     }
-  )
+  ]...)
 }
 
-
-
-# OpenSearch User Resource
+# Resources
 resource "opensearch_user" "users" {
   for_each = local.users
 
@@ -142,7 +113,6 @@ resource "opensearch_user" "users" {
   attributes    = each.value.attributes
 }
 
-# OpenSearch Role Resource
 resource "opensearch_role" "roles" {
   for_each = local.roles
 
@@ -153,8 +123,10 @@ resource "opensearch_role" "roles" {
   dynamic "index_permissions" {
     for_each = each.value.index_permissions
     content {
-      index_patterns   = index_permissions.value.index_patterns
-      allowed_actions  = index_permissions.value.allowed_actions
+      index_patterns       = index_permissions.value.index_patterns
+      allowed_actions     = index_permissions.value.allowed_actions
+      masked_fields      = index_permissions.value.masked_fields
+      field_level_security = index_permissions.value.field_level_security
     }
   }
 
@@ -162,32 +134,30 @@ resource "opensearch_role" "roles" {
     for_each = each.value.tenant_permissions
     content {
       tenant_patterns  = tenant_permissions.value.tenant_patterns
-      allowed_actions  = tenant_permissions.value.allowed_actions
+      allowed_actions = tenant_permissions.value.allowed_actions
     }
   }
 }
 
-# OpenSearch Role Mapping Resource
 resource "opensearch_roles_mapping" "mappings" {
   for_each = local.role_mappings
 
   role_name     = each.key
   backend_roles = each.value.backend_roles
-  
-  depends_on = [
-    opensearch_user.users,
-    opensearch_role.roles
-  ]
+  users         = each.value.users
+
+  depends_on = [opensearch_role.roles, opensearch_user.users]
 }
 
+# Outputs
 output "created_users" {
-  value = keys(opensearch_user.users)
+  value = [for user in opensearch_user.users : user.username]
 }
 
 output "created_roles" {
-  value = keys(opensearch_role.roles)
+  value = [for role in opensearch_role.roles : role.role_name]
 }
 
-output "created_role_mappings" {
-  value = keys(opensearch_roles_mapping.mappings)
+output "role_mappings" {
+  value = [for mapping in opensearch_roles_mapping.mappings : mapping.role_name]
 }
