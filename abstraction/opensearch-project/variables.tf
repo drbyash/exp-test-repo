@@ -28,70 +28,27 @@ variable "insecure" {
   default     = false
 }
 
-# Interactive input variables
-variable "app_name" {
-  description = "Enter the application name"
-  type        = string
-}
-
-variable "role_name" {
-  description = "Enter the role name"
-  type        = string
-}
-
-variable "create_user" {
-  description = "Do you want to create a user? (true/false)"
-  type        = bool
-}
-
-variable "user_password" {
-  description = "Enter user password if creating user"
-  type        = string
-  default     = null
-}
-
-variable "create_role" {
-  description = "Do you want to create a custom role? (true/false)"
-  type        = bool
-}
-
-variable "cluster_permissions" {
-  description = "List of cluster permissions"
-  type        = list(string)
-  default     = []
-}
-
-variable "index_patterns" {
-  description = "List of index patterns"
-  type        = list(string)
-  default     = []
-}
-
-variable "index_actions" {
-  description = "List of allowed index actions"
-  type        = list(string)
-  default     = []
-}
-
-variable "tenant_patterns" {
-  description = "List of tenant patterns"
-  type        = list(string)
-  default     = []
-}
-
-variable "tenant_actions" {
-  description = "List of tenant actions"
-  type        = list(string)
-  default     = []
-}
-
-variable "backend_roles" {
-  description = "List of backend roles (IAM ARNs)"
-  type        = list(string)
-}
-
-variable "existing_role" {
-  description = "Name of existing role to use when not creating a new role"
-  type        = string
-  default     = null
+variable "application_config" {
+  description = "Application configuration for OpenSearch access control"
+  type = object({
+    name = string
+    access_control = map(object({
+      create_user    = bool
+      password      = optional(string)
+      create_role   = bool
+      permissions   = optional(object({
+        cluster_permissions = list(string)
+        index_permissions  = list(object({
+          index_patterns  = list(string)
+          allowed_actions = list(string)
+        }))
+        tenant_permissions = optional(list(object({
+          tenant_patterns = list(string)
+          allowed_actions = list(string)
+        })))
+      }))
+      existing_role = optional(string)
+      backend_roles = list(string)
+    }))
+  })
 }
