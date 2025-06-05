@@ -1,7 +1,7 @@
 # Local variables for resource creation
 locals {
   # User configurations
-  users = {
+  users = { 
     for role_name, config in var.application_config.access_control :
     "${var.application_config.name}_${role_name}_user" => {
       password = config.password
