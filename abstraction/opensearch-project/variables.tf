@@ -47,8 +47,9 @@ variable "application_config" {
           allowed_actions = list(string)
         })))
       }))
-      existing_role = optional(string)
+      existing_roles = list(string)
       backend_roles = list(string)
+      custom_attributes= map(string)
     }))
   })
 }
