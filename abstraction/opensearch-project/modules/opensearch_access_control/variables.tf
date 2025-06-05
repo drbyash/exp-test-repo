@@ -19,7 +19,7 @@ variable "application_config" {
       }))
       existing_roles = list(string) #
       backend_roles = list(string)
-      custom_attributes = optional(map(string), {})  # Add custom attributes
+      custom_attributes = optional(map(string), {})  # Add custom attributes 
     }))
   })
 
