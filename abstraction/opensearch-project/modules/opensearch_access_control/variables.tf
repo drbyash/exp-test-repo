@@ -1,11 +1,10 @@
-# modules/opensearch_access_control/variables.tf
 variable "application_config" {
   description = "Application configuration for OpenSearch access control"
   type = object({
     name = string
     access_control = map(object({
       create_user    = bool
-      password      = optional(string)
+      password      = sensitive(string) #replace with sensitive(string) if you want to mask the password in outputs 
       create_role   = bool
       permissions   = optional(object({
         cluster_permissions = list(string)
@@ -18,8 +17,9 @@ variable "application_config" {
           allowed_actions = list(string)
         })))
       }))
-      existing_role = optional(string)
+      existing_roles = list(string) #
       backend_roles = list(string)
+      custom_attributes = optional(map(string), {})  # Add custom attributes
     }))
   })
 
@@ -28,7 +28,7 @@ variable "application_config" {
       for k, v in var.application_config.access_control :
       (!v.create_role && v.existing_role != null) || (v.create_role && v.permissions != null)
     ])
-    error_message = "When create_role is false, existing_role must be provided. When create_role is true, permissions must be provided."
+    error_message = "When create_role is false, existing_roles must be provided. When create_role is true, permissions must be provided."
   }
 
   validation {
