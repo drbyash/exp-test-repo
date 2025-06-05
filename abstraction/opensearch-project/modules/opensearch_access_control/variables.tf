@@ -4,7 +4,7 @@ variable "application_config" {
     name = string
     access_control = map(object({
       create_user    = bool
-      password      = sensitive(string) #replace with sensitive(string) if you want to mask the password in outputs 
+      password      = sensitive(string) 
       create_role   = bool
       permissions   = optional(object({
         cluster_permissions = list(string)
