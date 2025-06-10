@@ -1,4 +1,0 @@
-aws_region = "us-east-1"
-redis_cluster_id = "my-redis-cluster"
-name_prefix = "myapp"
-redis_user_password = "StrongPassword123!" # Replace with a secure password
