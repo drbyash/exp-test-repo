@@ -57,15 +57,6 @@ resource "aws_elasticache_replication_group" "update_redis" {
   num_cache_clusters         = length(data.aws_elasticache_replication_group.existing_redis.member_clusters)
   automatic_failover_enabled = data.aws_elasticache_replication_group.existing_redis.automatic_failover_enabled
   
-  # If using cluster mode
-  dynamic "cluster_mode" {
-    for_each = data.aws_elasticache_replication_group.existing_redis.cluster_enabled ? [1] : []
-    content {
-      replicas_per_node_group = data.aws_elasticache_replication_group.existing_redis.replicas_per_node_group
-      num_node_groups         = data.aws_elasticache_replication_group.existing_redis.num_node_groups
-    }
-  }
-  
   # Keep existing security settings
   at_rest_encryption_enabled = true
   transit_encryption_enabled = true
@@ -93,7 +84,10 @@ resource "aws_elasticache_replication_group" "update_redis" {
       global_replication_group_id,
       ip_discovery,
       network_type,
-      log_delivery_configuration
+      log_delivery_configuration,
+      node_type,
+      num_cache_clusters,
+      automatic_failover_enabled
     ]
   }
 }
